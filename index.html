@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estatística Aplicada — Resumo Interativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ====================== TOKENS ====================== */
+  :root{
+    --font-display:'Fraunces',Georgia,serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','Courier New',monospace;
+
+    --ink:#1C1512;
+    --ink-soft:#5B4F49;
+    --paper:#F7F5F3;
+    --surface:#FFFFFF;
+    --surface-alt:#EFEAE5;
+    --border:#E2DAD2;
+
+    --red-900:#3C070E;
+    --red-700:#7A0E1C;
+    --red-600:#AE1226;
+    --red-500:#D2172E;
+    --red-400:#E8626F;
+    --red-100:#F8DEE1;
+
+    --success:#2E6B4E;
+    --success-bg:#DCEDE3;
+
+    --hero-bg:#170F0D;
+    --ink-invert:#F5EDE8;
+    --ink-invert-soft:#C9B9B2;
+
+    --topbar-h:60px;
+    --radius-sm:6px;
+    --radius-md:12px;
+    --radius-lg:20px;
+    --maxw:880px;
+
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#F2E9E4;
+      --ink-soft:#C9BAB2;
+      --paper:#141010;
+      --surface:#1D1815;
+      --surface-alt:#241E1A;
+      --border:#3A2E28;
+      --red-600:#E14A53;
+      --red-500:#FF5A63;
+      --red-400:#FF848C;
+      --red-100:#452023;
+      --success:#5FBE8E;
+      --success-bg:#1E3229;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#F2E9E4;
+    --ink-soft:#C9BAB2;
+    --paper:#141010;
+    --surface:#1D1815;
+    --surface-alt:#241E1A;
+    --border:#3A2E28;
+    --red-600:#E14A53;
+    --red-500:#FF5A63;
+    --red-400:#FF848C;
+    --red-100:#452023;
+    --success:#5FBE8E;
+    --success-bg:#1E3229;
+    color-scheme: dark;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  html{
+    scroll-padding-top: calc(var(--topbar-h) + 110px + env(safe-area-inset-top,0px));
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  img,svg{ max-width:100%; display:block; }
+  h1,h2,h3{ font-family:var(--font-display); margin:0; }
+  p{ margin:0 0 .75em; }
+  p:last-child{ margin-bottom:0; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2.5px solid var(--red-500); outline-offset:2px; border-radius:4px; }
+
+  .container{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
+
+  /* ====================== TOPBAR ====================== */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding-top:env(safe-area-inset-top,0px);
+  }
+  .topbar-row{
+    max-width:1100px; margin:0 auto; padding:0 20px;
+    height:var(--topbar-h);
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand-mark{
+    width:30px; height:30px; border-radius:8px;
+    background:var(--red-600);
+    display:flex; align-items:flex-end; justify-content:center; gap:3px;
+    padding:6px 6px 5px;
+    flex-shrink:0;
+  }
+  .brand-mark span{ display:block; width:4px; background:var(--ink-invert); border-radius:1px; }
+  .brand-mark span:nth-child(1){ height:6px; }
+  .brand-mark span:nth-child(2){ height:11px; }
+  .brand-mark span:nth-child(3){ height:16px; }
+  .brand-name{
+    font-family:var(--font-display); font-weight:600; font-size:1.05rem;
+    color:var(--ink); white-space:nowrap;
+  }
+  .brand-sub{ display:none; }
+  @media (min-width:600px){
+    .brand-sub{
+      display:inline; font-family:var(--font-body); font-size:.78rem;
+      color:var(--ink-soft); margin-left:4px; padding-left:10px; border-left:1px solid var(--border);
+    }
+  }
+  .topbar-spacer{ flex:1; }
+  .mini-progress{
+    display:none; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:.8rem; color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  @media (min-width:560px){ .mini-progress{ display:flex; } }
+  .mini-progress-track{ width:64px; height:5px; border-radius:3px; background:var(--surface-alt); overflow:hidden; }
+  .mini-progress-fill{ height:100%; background:var(--red-600); width:0%; transition:width .35s ease; }
+
+  .unit-tabs-row{
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .unit-tabs{
+    max-width:1100px; margin:0 auto; padding:10px 20px;
+    display:flex; gap:8px;
+  }
+  .unit-tab{
+    flex:0 0 auto;
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+    background:transparent; border:1px solid var(--border); cursor:pointer;
+    border-radius:10px; padding:7px 14px 8px;
+    color:var(--ink-soft);
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .unit-tab-num{ font-family:var(--font-mono); font-size:.72rem; letter-spacing:.02em; }
+  .unit-tab-name{ font-family:var(--font-body); font-weight:600; font-size:.86rem; color:var(--ink); white-space:nowrap; }
+  .unit-tab:hover{ border-color:var(--red-400); }
+  .unit-tab.active{ background:var(--red-600); border-color:var(--red-600); }
+  .unit-tab.active .unit-tab-num{ color:var(--red-100); }
+  .unit-tab.active .unit-tab-name{ color:#fff; }
+  body.is-searching .unit-tab{ opacity:.5; pointer-events:none; }
+
+  /* ====================== HERO ====================== */
+  .hero{
+    background:var(--hero-bg);
+    color:var(--ink-invert);
+    padding:44px 0 40px;
+  }
+  .hero-inner{
+    max-width:1100px; margin:0 auto; padding:0 20px;
+    display:grid; grid-template-columns:1fr; gap:28px;
+  }
+  @media (min-width:860px){
+    .hero-inner{ grid-template-columns:1.1fr 1fr; align-items:center; gap:36px; }
+  }
+  .hero-eyebrow{
+    font-size:.85rem; color:var(--ink-invert-soft); margin-bottom:10px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem,5.2vw,3.1rem);
+    font-weight:600; line-height:1.05; letter-spacing:-.01em;
+    color:var(--ink-invert);
+    margin-bottom:14px;
+  }
+  .hero p.lead{
+    font-size:1.02rem; color:var(--ink-invert-soft); max-width:46ch;
+    margin-bottom:22px;
+  }
+  .hero-stats{ display:flex; gap:26px; flex-wrap:wrap; }
+  .hero-stat-num{ font-family:var(--font-mono); font-size:1.7rem; color:var(--red-400); line-height:1; }
+  .hero-stat-label{ font-size:.8rem; color:var(--ink-invert-soft); margin-top:4px; }
+  .hero-art{ width:100%; height:auto; }
+
+  /* ====================== TOOLBAR ====================== */
+  .toolbar{
+    padding:22px 20px 18px;
+    display:flex; flex-wrap:wrap; gap:10px 14px;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    margin-bottom:22px;
+  }
+  .search-wrap{ flex:1 1 220px; min-width:0; }
+  .search-input{
+    width:100%; padding:9px 13px;
+    border:1px solid var(--border); border-radius:10px;
+    background:var(--surface); color:var(--ink);
+    font-family:var(--font-body); font-size:.92rem;
+  }
+  .search-input::placeholder{ color:var(--ink-soft); }
+  .toolbar-btn{
+    background:transparent; border:1px solid var(--border); color:var(--ink);
+    padding:9px 14px; border-radius:10px; font-size:.86rem; font-weight:500; cursor:pointer;
+    white-space:nowrap;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .toolbar-btn:hover{ border-color:var(--red-500); color:var(--red-600); }
+  .toolbar-progress{
+    font-family:var(--font-mono); font-size:.8rem; color:var(--ink-soft); white-space:nowrap;
+  }
+  .toolbar-reset{
+    background:none; border:none; color:var(--ink-soft); font-size:.8rem; text-decoration:underline;
+    cursor:pointer; padding:4px 0; margin-left:auto;
+  }
+  .toolbar-reset:hover{ color:var(--red-600); }
+  .no-results{
+    display:none; padding:30px 4px; color:var(--ink-soft); font-size:.95rem;
+  }
+
+  /* ====================== UNIT PANEL ====================== */
+  .unit-panel{ display:none; }
+  .unit-panel.active{ display:block; }
+  body.is-searching .unit-panel{ display:block; }
+  body.is-searching .unit-panel + .unit-panel{ margin-top:40px; padding-top:32px; border-top:1px solid var(--border); }
+
+  .unit-head{
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end;
+    gap:14px; margin-bottom:18px;
+  }
+  .unit-head-label{ font-size:.82rem; color:var(--ink-soft); margin-bottom:6px; }
+  .unit-head h2{ font-size:1.55rem; font-weight:600; color:var(--ink); }
+  .unit-blurb{ color:var(--ink-soft); font-size:.92rem; max-width:52ch; margin-top:6px; }
+  .unit-progress{ min-width:150px; text-align:right; }
+  .unit-progress-track{ width:100%; max-width:150px; height:6px; border-radius:4px; background:var(--surface-alt); overflow:hidden; margin-left:auto; }
+  .unit-progress-fill{ height:100%; background:var(--red-600); width:0%; transition:width .35s ease; }
+  .unit-progress-label{ display:block; font-family:var(--font-mono); font-size:.76rem; color:var(--ink-soft); margin-top:5px; }
+
+  .chip-row{
+    display:flex; gap:7px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:6px; margin-bottom:22px;
+  }
+  .chip{
+    flex:0 0 auto; font-size:.78rem; color:var(--ink-soft);
+    background:var(--surface-alt); border-radius:999px; padding:6px 12px;
+    text-decoration:none; cursor:pointer; white-space:nowrap;
+    border:1px solid transparent;
+  }
+  .chip:hover{ border-color:var(--red-400); color:var(--red-600); }
+  .chip b{ font-family:var(--font-mono); font-weight:600; color:var(--red-600); margin-right:5px; }
+
+  /* ====================== TOPIC ACCORDION ====================== */
+  .topic-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:8px; }
+  .topic{
+    border:1px solid var(--border); border-radius:var(--radius-md);
+    background:var(--surface);
+    scroll-margin-top: calc(var(--topbar-h) + 118px + env(safe-area-inset-top,0px));
+    overflow:hidden;
+  }
+  .topic.is-done{ border-color:var(--success); }
+  .topic-head{
+    width:100%; display:flex; align-items:center; gap:12px;
+    background:none; border:none; text-align:left; cursor:pointer;
+    padding:14px 16px;
+    color:var(--ink);
+  }
+  .topic-num{
+    flex:0 0 auto; width:28px; height:28px; border-radius:8px;
+    background:var(--red-100); color:var(--red-600);
+    font-family:var(--font-mono); font-size:.82rem; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease;
+  }
+  .topic.is-done .topic-num{ background:var(--success); color:#fff; }
+  .topic-title{ font-weight:600; font-size:.98rem; flex:1; }
+  .topic-chevron{
+    flex:0 0 auto; width:8px; height:8px;
+    border-right:2px solid var(--ink-soft); border-bottom:2px solid var(--ink-soft);
+    transform:rotate(45deg); transition:transform .25s ease; margin-right:4px;
+  }
+  .topic.open .topic-chevron{ transform:rotate(-135deg); }
+
+  .topic-body-wrap{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .28s ease; }
+  .topic.open .topic-body-wrap{ grid-template-rows:1fr; }
+  .topic-body{ overflow:hidden; }
+  .topic-body-inner{ padding:0 16px 18px; }
+
+  .explain{ color:var(--ink); font-size:.95rem; margin-bottom:14px; }
+  .box{ border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:10px; font-size:.92rem; }
+  .box-label{ font-weight:600; font-size:.78rem; margin-bottom:5px; }
+  .box.example{ background:var(--surface-alt); border-left:3px solid var(--ink-soft); }
+  .box.example .box-label{ color:var(--ink-soft); }
+  .box.exercise{ background:var(--red-100); border-left:3px solid var(--red-600); margin-bottom:0; }
+  .box.exercise .box-label{ color:var(--red-600); }
+  .reveal-btn{
+    margin-top:8px; background:transparent; border:1.5px solid var(--red-600); color:var(--red-600);
+    padding:6px 13px; border-radius:8px; font-size:.82rem; font-weight:600; cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .reveal-btn:hover{ background:var(--red-600); color:#fff; }
+  .answer{ display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--red-400); }
+  .exercise.revealed .answer{ display:block; }
+  .f{
+    font-family:var(--font-mono); background:var(--surface);
+    padding:.08em .5em; border-radius:5px; font-size:.9em;
+    border:1px solid var(--border);
+  }
+  .box.exercise .f{ background:var(--surface); }
+
+  .done-toggle{
+    display:flex; align-items:center; gap:7px; margin-top:14px;
+    font-size:.85rem; color:var(--ink-soft); cursor:pointer; user-select:none;
+  }
+  .done-toggle input{ accent-color:var(--success); width:16px; height:16px; cursor:pointer; }
+
+  /* ====================== FOOTER ====================== */
+  footer{
+    border-top:1px solid var(--border); margin-top:36px; padding:26px 20px 40px;
+    color:var(--ink-soft); font-size:.82rem; text-align:center;
+  }
+
+  /* ====================== TO TOP ====================== */
+  .to-top{
+    position:fixed; right:18px; bottom:calc(18px + env(safe-area-inset-bottom,0px));
+    width:44px; height:44px; border-radius:50%;
+    background:var(--red-600); color:#fff; border:none; cursor:pointer;
+    font-size:1.1rem; display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+    z-index:30;
+  }
+  .to-top.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+
+/* ===== AJUSTES EXTRAS PARA CELULAR ===== */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+body {
+  overflow-x: hidden;
+}
+button, input, a {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  touch-action: manipulation;
+}
+@media (max-width: 599px) {
+  :root {
+    --topbar-h: 54px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .topbar-row {
+    height: 54px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+  }
+
+  .brand-name {
+    font-size: .94rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .unit-tabs-row {
+    scrollbar-width: none;
+  }
+  .unit-tabs-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .unit-tabs {
+    padding: 8px 12px 9px;
+    gap: 7px;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .unit-tab {
+    min-height: 46px;
+    padding: 7px 11px 8px;
+  }
+
+  .unit-tab-num {
+    font-size: .66rem;
+  }
+
+  .unit-tab-name {
+    font-size: .78rem;
+  }
+
+  .hero {
+    padding: 30px 0 26px;
+  }
+
+  .hero-inner {
+    padding: 0 14px;
+    gap: 22px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .hero p.lead {
+    font-size: .94rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .hero-stats {
+    gap: 18px;
+  }
+
+  .hero-stat-num {
+    font-size: 1.45rem;
+  }
+
+  .hero-stat-label {
+    font-size: .72rem;
+  }
+
+  .hero-art {
+    min-height: 130px;
+  }
+
+  .toolbar {
+    padding: 14px 0 14px;
+    margin-bottom: 18px;
+    gap: 8px;
+  }
+
+  .search-wrap {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .search-input {
+    min-height: 44px;
+    font-size: 16px; /* evita zoom automático no iOS */
+    padding: 10px 12px;
+  }
+
+  .toolbar-btn {
+    min-height: 42px;
+    padding: 9px 11px;
+    font-size: .78rem;
+  }
+
+  .toolbar-progress {
+    font-size: .72rem;
+    margin-left: auto;
+  }
+
+  .toolbar-reset {
+    font-size: .72rem;
+  }
+
+  .unit-head {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .unit-head h2 {
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  .unit-blurb {
+    font-size: .86rem;
+  }
+
+  .unit-progress {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .unit-progress-track {
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .chip-row {
+    margin-right: -12px;
+    padding-right: 12px;
+    margin-bottom: 16px;
+  }
+
+  .chip {
+    padding: 7px 11px;
+    font-size: .74rem;
+  }
+
+  .topic-list {
+    gap: 8px;
+  }
+
+  .topic-head {
+    min-height: 58px;
+    padding: 12px 12px;
+    gap: 9px;
+  }
+
+  .topic-num {
+    width: 27px;
+    height: 27px;
+    border-radius: 7px;
+    font-size: .76rem;
+  }
+
+  .topic-title {
+    font-size: .91rem;
+    line-height: 1.28;
+  }
+
+  .topic-chevron {
+    width: 7px;
+    height: 7px;
+    margin-right: 2px;
+  }
+
+  .topic-body-inner {
+    padding: 0 12px 15px;
+  }
+
+  .explain {
+    font-size: .91rem;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  .box {
+    padding: 11px 11px;
+    font-size: .87rem;
+    line-height: 1.5;
+  }
+
+  .box-label {
+    font-size: .74rem;
+  }
+
+  .f {
+    font-size: .84em;
+    overflow-wrap: anywhere;
+  }
+
+  .reveal-btn {
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
+  .done-toggle {
+    min-height: 40px;
+    font-size: .8rem;
+  }
+
+  .done-toggle input {
+    width: 19px;
+    height: 19px;
+  }
+
+  footer {
+    margin-top: 28px;
+    padding: 22px 12px 34px;
+    font-size: .76rem;
+  }
+
+  .to-top {
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: 46px;
+    height: 46px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-name {
+    font-size: .88rem;
+  }
+
+  .hero h1 {
+    font-size: 1.82rem;
+  }
+
+  .hero-stats {
+    gap: 13px;
+  }
+
+  .hero-stat-num {
+    font-size: 1.3rem;
+  }
+
+  .toolbar-progress {
+    width: 100%;
+    margin-left: 0;
+    order: 5;
+  }
+
+  .toolbar-reset {
+    margin-left: auto;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <a class="brand" href="#top">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span class="brand-name">Estatística Aplicada</span>
+      <span class="brand-sub">Resumo interativo</span>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="mini-progress">
+      <span id="mini-progress-label">0/32</span>
+      <span class="mini-progress-track"><span class="mini-progress-fill" id="mini-progress-fill"></span></span>
+    </div>
+  </div>
+  <div class="unit-tabs-row">
+    <nav class="unit-tabs" id="unitTabs" aria-label="Selecionar unidade"></nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <p class="hero-eyebrow">Guia de estudos</p>
+      <h1>Estatística Aplicada, sem enrolação</h1>
+      <p class="lead">As 4 unidades da disciplina resumidas de um jeito simples: em cada tópico, uma explicação direta, um exemplo prático e um exercício pra você treinar.</p>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">4</div><div class="hero-stat-label">unidades</div></div>
+        <div><div class="hero-stat-num">32</div><div class="hero-stat-label">tópicos explicados</div></div>
+        <div><div class="hero-stat-num">32</div><div class="hero-stat-label">exercícios pra praticar</div></div>
+      </div>
+    </div>
+    <svg class="hero-art" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Histograma com curva normal sobreposta">
+      <line x1="30" y1="210" x2="570" y2="210" stroke="var(--ink-invert)" stroke-opacity="0.25" stroke-width="1.5"/>
+      <g fill="var(--red-500)" fill-opacity="0.22">
+        <rect x="50" y="196" width="40" height="14" rx="3"/>
+        <rect x="96" y="178" width="40" height="32" rx="3"/>
+        <rect x="142" y="155" width="40" height="55" rx="3"/>
+        <rect x="188" y="125" width="40" height="85" rx="3"/>
+        <rect x="234" y="95" width="40" height="115" rx="3"/>
+        <rect x="280" y="70" width="40" height="140" rx="3"/>
+        <rect x="326" y="95" width="40" height="115" rx="3"/>
+        <rect x="372" y="125" width="40" height="85" rx="3"/>
+        <rect x="418" y="155" width="40" height="55" rx="3"/>
+        <rect x="464" y="178" width="40" height="32" rx="3"/>
+        <rect x="510" y="196" width="40" height="14" rx="3"/>
+      </g>
+      <line x1="300" y1="45" x2="300" y2="210" stroke="var(--red-400)" stroke-opacity="0.6" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <path d="M40,205 C120,205 150,50 300,45 C450,50 480,205 560,205" fill="none" stroke="var(--red-500)" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="300" cy="45" r="4.5" fill="var(--red-500)"/>
+    </svg>
+  </div>
+</section>
+
+<div class="container">
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="search" id="searchInput" class="search-input" placeholder="Buscar um tópico (ex.: mediana, Bayes, boxplot)...">
+    </div>
+    <button class="toolbar-btn" id="expandAllBtn" aria-label="Expandir ou recolher os tópicos">Expandir tudo</button>
+    <span class="toolbar-progress" id="overallProgress">0 de 32 concluídos</span>
+    <button class="toolbar-reset" id="resetBtn">Limpar progresso</button>
+  </div>
+
+  <p class="no-results" id="noResults">Nenhum tópico encontrado com esse termo.</p>
+
+  <main id="panels"></main>
+</div>
+
+<footer>
+  Resumo de apoio aos estudos, baseado na apostila de Estatística Aplicada (USF EAD). Seu progresso fica salvo só neste navegador.
+</footer>
+
+<button class="to-top" id="toTopBtn" aria-label="Voltar ao topo">↑</button>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORAGE_KEY = "ea_resumo_progress_v1";
+
+  var DATA = [
+    {
+      id:1, code:"01", title:"Estatística Descritiva",
+      blurb:"Organizar, resumir e descrever um conjunto de dados.",
+      topics:[
+        { n:"1", title:"Pensamento estatístico",
+          explain:"A Estatística nasceu da necessidade prática de contar pessoas, riquezas e recursos, e hoje é uma ferramenta pra entender o mundo através de números. Pensar estatisticamente é olhar pros dados procurando padrões e tomar decisões mais seguras, em vez de confiar só no \u201Cachismo\u201D.",
+          example:"Antes de abrir uma loja num bairro, um empreendedor não decide \u201Cno olho\u201D — ele levanta dados de quantas pessoas moram ali, a renda média da região e quantos concorrentes já existem.",
+          exercise:"Cite duas situações do seu dia a dia em que uma decisão foi (ou poderia ser) tomada com base em dados, em vez de intuição.",
+          answer:"As respostas variam de pessoa pra pessoa. Alguns exemplos possíveis: escolher o horário de sair de casa usando o histórico de trânsito de um aplicativo; um médico decidir um tratamento com base em exames." },
+        { n:"2", title:"Estatística no dia a dia: população, amostra, descritiva e inferencial",
+          explain:"A Estatística se divide em duas partes: a <b>Descritiva</b>, que organiza e resume os dados coletados (tabelas, gráficos, médias), e a <b>Inferencial</b>, que usa uma amostra pra tirar conclusões sobre toda a população. <span class=\"f\">População</span> é o grupo todo que se quer estudar; <span class=\"f\">amostra</span> é uma parte dele, escolhida porque estudar todo mundo seria caro ou demorado demais.",
+          example:"Pra saber a intenção de voto de um país inteiro (população), institutos de pesquisa entrevistam só cerca de 2.000 pessoas (amostra) e projetam o resultado pra todos.",
+          exercise:"Uma fábrica produz 50.000 parafusos por mês e testa 200 deles pra verificar defeitos. Identifique quem é a população e quem é a amostra.",
+          answer:"População = os 50.000 parafusos produzidos no mês. Amostra = os 200 parafusos testados." },
+        { n:"3", title:"A importância da decisão baseada em dados",
+          explain:"Decisões de empresas e profissionais ficam muito mais seguras quando se baseiam em números organizados, e não em suposições soltas. A Estatística ajuda a planejar, controlar a qualidade e até prever riscos antes que eles aconteçam.",
+          example:"Uma emissora de TV usa dados reais de audiência — não só impressão pessoal — pra decidir quanto cobrar por um comercial em determinado horário.",
+          exercise:"Por que tomar uma decisão importante só por intuição, sem nenhum dado, costuma ser mais arriscado?",
+          answer:"Porque a intuição pode ser influenciada por poucos casos ou opiniões pessoais, enquanto os dados mostram um retrato mais amplo e mais próximo da realidade." },
+        { n:"4", title:"Desvios comuns na análise: o caso do viés de sobrevivência",
+          explain:"Às vezes, analisar só os dados \u201Cque sobraram\u201D (os casos que voltaram, que deram certo) leva a conclusões erradas — isso se chama <b>viés de sobrevivência</b>. É preciso pensar também nos dados que não aparecem na amostra.",
+          example:"Na Segunda Guerra, engenheiros olhavam os aviões que voltavam da batalha e viam mais furos de bala na fuselagem do que no motor. A conclusão errada seria blindar a fuselagem — mas o motor é que precisava de blindagem, porque os aviões atingidos ali não retornavam pra serem contados.",
+          exercise:"Uma revista entrevista só startups de sucesso, vê que a maioria dos fundadores abandonou a faculdade, e conclui que \u201Cfaculdade não é necessária pro sucesso\u201D. Qual é o problema dessa análise?",
+          answer:"A amostra só inclui quem teve sucesso (sobreviventes). Ela ignora todas as pessoas que abandonaram a faculdade e não tiveram sucesso, então a conclusão não é confiável." },
+        { n:"5", title:"Regra de arredondamento",
+          explain:"Pra padronizar os cálculos, usa-se o arredondamento matemático: olha-se o algarismo logo depois da casa que se quer manter. Se ele for menor que 5, mantém-se o algarismo anterior; se for 5 ou mais, soma-se 1 a esse algarismo.",
+          example:"Arredondando <span class=\"f\">8,2437</span> pra 2 casas: o 3º algarismo é \u201C3\u201D (menor que 5) → fica <span class=\"f\">8,24</span>. Já <span class=\"f\">45,398</span> pra 1 casa: o 2º algarismo é \u201C9\u201D (5 ou mais) → fica <span class=\"f\">45,4</span>.",
+          exercise:"Arredonde 29,3652 para três casas decimais.",
+          answer:"O quarto algarismo decimal é \u201C2\u201D (menor que 5), então mantém-se o terceiro. Resultado: <span class=\"f\">29,365</span>." },
+        { n:"6", title:"Tipos de amostragem e cálculo do tamanho da amostra",
+          explain:"Existem várias formas de escolher uma amostra: <b>casual/simples</b> (sorteio, todo mundo tem a mesma chance), <b>sistemática</b> (escolhe-se de tantos em tantos elementos) e <b>proporcional/estratificada</b> (respeitando proporções de subgrupos). Pra saber quantos elementos a amostra precisa ter, usa-se: <span class=\"f\">n\u2080 = 1 \u00F7 E\u2080\u00B2</span> e depois <span class=\"f\">n = (N\u00D7n\u2080) \u00F7 (N+n\u2080)</span>, onde N é o tamanho da população e E\u2080 é o erro tolerável.",
+          example:"Numa linha de produção com 600 peças em fila, pra uma amostra sistemática de 30 peças: 600\u00F730=20. Sorteando a peça de partida na posição 8, a amostra é formada pelas peças 8, 28, 48, 68... até completar 30.",
+          exercise:"Uma pesquisa vai ser feita numa população de 8.000 pessoas, aceitando um erro tolerável de 4% (0,04). Calcule o tamanho da amostra necessário.",
+          answer:"n\u2080 = 1\u00F70,04\u00B2 = 625. n = (8000\u00D7625)\u00F7(8000+625) = 5.000.000\u00F78.625 \u2248 579,7 → arredondando, <b>n \u2248 580 pessoas</b>." },
+        { n:"7", title:"Parâmetros de posição: média, moda e mediana",
+          explain:"Essas medidas indicam um valor \u201Ccentral\u201D que representa o conjunto de dados. A <b>média</b> é a soma de todos os valores dividida pela quantidade deles (<span class=\"f\">x\u0304 = \u03A3x \u00F7 n</span>); a <b>moda</b> é o valor que mais se repete; e a <b>mediana</b> é o valor do meio quando os dados estão em ordem.",
+          example:"Nos valores 3, 5, 5, 7, 10: a média é (3+5+5+7+10)\u00F75 = 6; a moda é 5 (repete duas vezes); a mediana é 5 (valor do meio).",
+          exercise:"Calcule a média, a moda e a mediana do conjunto: 4, 8, 8, 9, 12, 15.",
+          answer:"Média = 56\u00F76 \u2248 9,33. Moda = 8. Mediana = (8+9)\u00F72 = 8,5 (média dos dois valores centrais, já que são 6 números)." },
+        { n:"8", title:"Parâmetros de dispersão: amplitude, variância e desvio padrão",
+          explain:"A média sozinha pode enganar — dois grupos podem ter a mesma média e dispersões bem diferentes. A <b>amplitude</b> é maior menos menor valor; a <b>variância</b> mede o quanto os valores se afastam da média, elevando as diferenças ao quadrado (<span class=\"f\">s\u00B2 = \u03A3(x\u2212x\u0304)\u00B2 \u00F7 (n\u22121)</span>); e o <b>desvio padrão</b> é a raiz quadrada da variância, voltando à unidade original dos dados.",
+          example:"Para os valores 4, 6, 8: a média é 6. Variância = [(4\u22126)\u00B2+(6\u22126)\u00B2+(8\u22126)\u00B2]\u00F7(3\u22121) = (4+0+4)\u00F72 = 4. Desvio padrão = \u221A4 = 2.",
+          exercise:"Calcule a variância e o desvio padrão do conjunto: 2, 4, 6, 8 (média = 5).",
+          answer:"Variância = [(2\u22125)\u00B2+(4\u22125)\u00B2+(6\u22125)\u00B2+(8\u22125)\u00B2]\u00F7(4\u22121) = (9+1+1+9)\u00F73 = 20\u00F73 \u2248 6,67. Desvio padrão = \u221A6,67 \u2248 2,58." },
+        { n:"9", title:"Parâmetros relativos: coeficiente de variação",
+          explain:"O <b>coeficiente de variação</b> (CV) compara o desvio padrão com a média, em porcentagem — <span class=\"f\">CV = (s \u00F7 x\u0304) \u00D7 100</span> — e serve pra comparar a dispersão de conjuntos com unidades diferentes. Até 25% os dados são considerados homogêneos; acima disso, heterogêneos.",
+          example:"Peso de pacotes: média 2 kg, desvio padrão 0,1 kg → CV = 5%. Tempo de entrega: média 45 min, desvio padrão 6 min → CV \u2248 13,3%. Mesmo com desvio padrão \u201Cmaior\u201D em número absoluto, o tempo de entrega varia proporcionalmente mais.",
+          exercise:"Um processo tem média 40 e desvio padrão 12. Calcule o CV e diga se o processo é homogêneo.",
+          answer:"CV = (12\u00F740)\u00D7100 = 30%. Como é maior que 25%, o processo é considerado <b>heterogêneo</b>." },
+        { n:"10", title:"Diagrama de ramos e folhas",
+          explain:"É uma forma simples de organizar números mostrando, ao mesmo tempo, a forma da distribuição e os valores exatos. Separa-se cada número em \u201Cramo\u201D (dezena, por exemplo) e \u201Cfolha\u201D (unidade), formando uma espécie de histograma feito só com os próprios algarismos.",
+          example:"Os valores 21, 22, 28, 33, 35 formam o diagrama: ramo 2 → folhas 1, 2, 8; ramo 3 → folhas 3, 5.",
+          exercise:"Monte o diagrama de ramos e folhas para os valores: 41, 43, 47, 52, 55, 58, 59.",
+          answer:"Ramo 4 → folhas 1, 3, 7. Ramo 5 → folhas 2, 5, 8, 9." },
+        { n:"11", title:"Tabela de frequências",
+          explain:"Quando há muitos dados, eles são organizados em classes (faixas de valores). Calcula-se a amplitude total (<span class=\"f\">AT = máx \u2212 mín</span>), o número de classes (<span class=\"f\">NC = \u221An</span>) e a amplitude de cada classe (<span class=\"f\">AC = AT \u00F7 NC</span>).",
+          example:"Com 36 dados variando de 20 a 68: AT = 68\u221220 = 48. NC = \u221A36 = 6 classes. AC = 48\u00F76 = 8.",
+          exercise:"Um conjunto tem 25 dados, com valor mínimo 8 e máximo 58. Calcule o número de classes e a amplitude de cada classe.",
+          answer:"AT = 58\u22128 = 50. NC = \u221A25 = 5 classes. AC = 50\u00F75 = 10." },
+        { n:"12", title:"Histograma: construção e análise",
+          explain:"O histograma é um gráfico de barras coladas (sem espaço entre elas) que mostra a frequência de cada classe da tabela de frequências. Ele revela rapidamente se os dados são simétricos, têm um \u201Cpico\u201D bem definido, ou estão bem espalhados.",
+          example:"Ao construir o histograma de notas de uma turma, se a maior parte das barras se concentra no meio (perto da média) e cai nas pontas, isso sugere uma distribuição parecida com a \u201Cnormal\u201D (formato de sino).",
+          exercise:"O que significa um histograma com uma barra bem mais alta que as outras, isolada numa das pontas do gráfico?",
+          answer:"Indica um valor (ou faixa de valores) bem mais frequente que os demais, deslocado pra uma ponta — o que pode indicar assimetria nos dados." },
+        { n:"13", title:"Boxplot: construção e análise",
+          explain:"O boxplot resume os dados em 5 números: o mínimo, o primeiro quartil (Q1), a mediana (Q2), o terceiro quartil (Q3) e o máximo. A \u201Ccaixa\u201D vai de Q1 a Q3, e as hastes mostram até onde os dados \u201Cnormais\u201D chegam; pontos fora disso são outliers.",
+          example:"Comparando o boxplot de três turmas lado a lado, é fácil ver qual turma tem notas mais concentradas (caixa estreita) e qual tem alunos com notas bem fora do padrão (outliers, pontos soltos fora da caixa).",
+          exercise:"Se a caixa (entre Q1 e Q3) de um boxplot está bem \u201Cachatada\u201D/estreita, o que isso indica sobre os dados?",
+          answer:"Indica que os dados centrais (os 50% do meio) estão bem próximos uns dos outros — ou seja, baixa dispersão nessa parte da distribuição." }
+      ]
+    },
+    {
+      id:2, code:"02", title:"Probabilidade e suas Aplicações",
+      blurb:"Medir a chance de eventos acontecerem.",
+      topics:[
+        { n:"1", title:"A história da probabilidade e os jogos de azar",
+          explain:"A teoria da probabilidade nasceu no século 17, quando matemáticos como Pascal e Fermat tentaram resolver problemas de apostas e jogos de dados. Hoje ela é usada bem além dos jogos: em seguros, medicina, engenharia e previsão do tempo.",
+          example:"Um jogador queria saber como dividir de forma justa as apostas de um jogo interrompido antes do fim — foi esse tipo de pergunta que deu origem aos primeiros cálculos formais de probabilidade.",
+          exercise:"Cite uma área, fora dos jogos de azar, que hoje usa a probabilidade pra tomar decisões.",
+          answer:"Várias respostas são possíveis: seguros (calcular o risco de um acidente), medicina (chance de um tratamento funcionar), previsão do tempo, controle de qualidade numa indústria, entre outras." },
+        { n:"2", title:"Revisão da teoria dos conjuntos",
+          explain:"Antes de calcular probabilidades, vale relembrar operações com conjuntos: <b>união</b> (\u222A, tudo que está em A ou em B), <b>interseção</b> (\u2229, o que está em A e em B ao mesmo tempo) e <b>complementar</b> (o que não está no conjunto). Essas ideias são a base pra entender eventos em probabilidade.",
+          example:"Se A = {1,2,3} e B = {2,3,4}, então A\u222AB = {1,2,3,4} e A\u2229B = {2,3}.",
+          exercise:"Dados A = {2,4,6,8} e B = {4,8,12}, calcule A\u2229B e A\u222AB.",
+          answer:"A\u2229B = {4,8}. A\u222AB = {2,4,6,8,12}." },
+        { n:"3", title:"Espaço amostral e eventos",
+          explain:"O <b>espaço amostral</b> (S) é o conjunto de todos os resultados possíveis de um experimento aleatório. Um <b>evento</b> é qualquer subconjunto desse espaço: pode ser simples (um elemento só), composto (vários), certo (é o próprio espaço) ou impossível (conjunto vazio).",
+          example:"No lançamento de um dado, S = {1,2,3,4,5,6}. O evento \u201Csair número par\u201D é {2,4,6} — um evento composto.",
+          exercise:"No lançamento de duas moedas, escreva o espaço amostral e o evento \u201Csair pelo menos uma cara\u201D.",
+          answer:"S = {(cara,cara), (cara,coroa), (coroa,cara), (coroa,coroa)}. O evento \u201Cpelo menos uma cara\u201D = {(cara,cara), (cara,coroa), (coroa,cara)}." },
+        { n:"4", title:"Definição e cálculo de probabilidade",
+          explain:"A probabilidade de um evento A é o número de resultados favoráveis dividido pelo total de resultados possíveis: <span class=\"f\">P(A) = n(A) \u00F7 n(S)</span>. O resultado fica sempre entre 0 (impossível) e 1 (certeza), podendo ser expresso em porcentagem.",
+          example:"Ao tirar uma carta de um baralho de 52 cartas, a chance de sair um \u201CÁs\u201D é P = 4\u00F752 \u2248 7,7%.",
+          exercise:"Numa urna com 12 bolas, 5 azuis e 7 vermelhas, qual a probabilidade de tirar uma bola azul?",
+          answer:"P(azul) = 5\u00F712 \u2248 41,7%." },
+        { n:"5", title:"Probabilidade da união de eventos",
+          explain:"Pra calcular a chance de \u201CA ou B\u201D acontecer, somam-se P(A) e P(B). Se os eventos puderem ocorrer juntos, é preciso subtrair a interseção pra não contar duas vezes: <span class=\"f\">P(A\u222AB) = P(A) + P(B) \u2212 P(A\u2229B)</span>.",
+          example:"Numa rifa com 20 números, a chance de sair um múltiplo de 4 ou de 5: múltiplos de 4 = 5 números, de 5 = 4 números, de ambos (o 20) = 1 número. P = 5\u00F720 + 4\u00F720 \u2212 1\u00F720 = 8\u00F720 = 40%.",
+          exercise:"Em um baralho de 52 cartas, qual a probabilidade de tirar um \u201CRei\u201D ou uma carta de \u201CCopas\u201D?",
+          answer:"P(Rei)=4\u00F752, P(Copas)=13\u00F752, P(Rei de Copas)=1\u00F752. P(Rei\u222ACopas) = 16\u00F752 \u2248 30,8%." },
+        { n:"6", title:"Teorema do evento complementar",
+          explain:"O complementar de um evento A é \u201CA não acontecer\u201D. Como a soma de todas as chances precisa dar 100%: <span class=\"f\">P(Ā) = 1 \u2212 P(A)</span>. É útil quando calcular o complementar é mais fácil do que calcular o evento direto.",
+          example:"Se a chance de chover amanhã é 30%, a chance de NÃO chover é 1 \u2212 0,30 = 70%.",
+          exercise:"Em um lote de 20 peças, 3 são defeituosas. Qual a probabilidade de uma peça sorteada NÃO ser defeituosa?",
+          answer:"P(defeituosa) = 3\u00F720 = 15%. P(não defeituosa) = 1 \u2212 0,15 = 85%." },
+        { n:"7", title:"Teorema do produto (eventos independentes)",
+          explain:"Dois eventos são <b>independentes</b> quando um não interfere no outro. Nesse caso, a chance dos dois acontecerem juntos é o produto das probabilidades individuais: <span class=\"f\">P(A\u2229B) = P(A) \u00D7 P(B)</span>.",
+          example:"Um dado honesto é lançado e uma moeda é jogada ao mesmo tempo. Como são eventos independentes, a chance de sair 4 no dado E cara na moeda é P = (1\u00F76)\u00D7(1\u00F72) = 1\u00F712 \u2248 8,3%.",
+          exercise:"A chance de chover na cidade A é 40% e, de forma independente, a chance de chover na cidade B é 25%. Qual a chance de chover nas duas cidades ao mesmo tempo?",
+          answer:"P = 0,40 \u00D7 0,25 = 0,10 = 10%." },
+        { n:"8", title:"Teorema da probabilidade condicional",
+          explain:"A probabilidade condicional P(B|A) é a chance de B acontecer sabendo que A já aconteceu. Nesse caso, A vira o \u201Cnovo\u201D espaço amostral: <span class=\"f\">P(B|A) = P(A\u2229B) \u00F7 P(A)</span>.",
+          example:"Numa pesquisa, 70% das pessoas usam um app de transporte e 20% usam esse app E também um app de entrega de comida. A chance de alguém usar o app de entrega, dado que já usa o de transporte, é P = 0,20\u00F70,70 \u2248 28,6%.",
+          exercise:"Em uma turma, 60% dos alunos jogam futebol e 25% jogam futebol E vôlei. Qual a probabilidade de um aluno jogar vôlei, dado que ele joga futebol?",
+          answer:"P(vôlei|futebol) = 0,25\u00F70,60 \u2248 41,7%." },
+        { n:"9", title:"Árvore de probabilidade",
+          explain:"É um diagrama em forma de galhos que organiza visualmente as etapas de um experimento e suas probabilidades, ajudando a ver quando multiplicar (eventos em sequência) ou somar (caminhos diferentes que levam ao mesmo resultado).",
+          example:"No lançamento de duas moedas, a árvore mostra 4 caminhos (CC, CK, KC, KK), cada um com probabilidade (1\u00F72)\u00D7(1\u00F72)=1\u00F74 — e a chance de \u201Csair duas faces iguais\u201D é a soma dos caminhos CC e KK: 1\u00F74+1\u00F74 = 1\u00F72.",
+          exercise:"Usando uma árvore, calcule a probabilidade de sair \u201C6\u201D nos dois lançamentos de um dado.",
+          answer:"Cada lançamento tem P(6) = 1\u00F76 e são independentes, então P(6 e 6) = (1\u00F76)\u00D7(1\u00F76) = 1\u00F736 \u2248 2,78%." },
+        { n:"10", title:"Teorema de Bayes",
+          explain:"O Teorema de Bayes serve pra \u201Cinverter\u201D uma probabilidade condicional: a partir da chance de um teste dar positivo sabendo que existe um problema, ele calcula a chance real do problema existir sabendo que o teste deu positivo. É essencial pra entender por que exames de doenças raras podem gerar bastante \u201Calarme falso\u201D.",
+          example:"Um exame detecta corretamente 95% dos casos de uma doença rara (2% da população) e dá 5% de falso positivo em pessoas saudáveis. Aplicando Bayes: P(doença|teste+) = (0,95\u00D70,02) \u00F7 [(0,95\u00D70,02)+(0,05\u00D70,98)] \u2248 27,9% — bem menor do que os 95% de \u201Cprecisão\u201D do exame.",
+          exercise:"Um teste antidoping acerta 98% dos usuários de uma substância (rara: 0,5% dos atletas), mas dá 3% de falso positivo em quem não usa. Se um atleta testar positivo, qual é, aproximadamente, a chance de ele realmente ser usuário?",
+          answer:"P(uso|teste+) = (0,98\u00D70,005) \u00F7 [(0,98\u00D70,005)+(0,03\u00D70,995)] \u2248 14,1%. Mesmo um teste \u201Cbom\u201D gera muitos falsos positivos quando o problema é raro." },
+        { n:"11", title:"Parâmetros da população: variável aleatória",
+          explain:"Uma <b>variável aleatória</b> associa um número a cada resultado possível de um experimento. Pode ser <b>discreta</b> (valores inteiros, como número de filhos) ou <b>contínua</b> (qualquer valor num intervalo, como tempo ou altura). A partir dela calcula-se a média esperada: <span class=\"f\">E(X) = \u03A3xi \u00D7 P(xi)</span>.",
+          example:"Uma loteria paga R$ 100 com probabilidade 10% e R$ 0 com probabilidade 90%. O valor esperado do prêmio é E(X) = 100\u00D70,10 + 0\u00D70,90 = R$ 10.",
+          exercise:"Uma variável X tem a distribuição: P(X=0)=0,2; P(X=1)=0,5; P(X=2)=0,3. Calcule o valor esperado E(X).",
+          answer:"E(X) = 0\u00D70,2 + 1\u00D70,5 + 2\u00D70,3 = 0 + 0,5 + 0,6 = 1,1." }
+      ]
+    },
+    {
+      id:3, code:"03", title:"Distribuições de Probabilidade",
+      blurb:"Modelos matemáticos para diferentes tipos de variável aleatória.",
+      topics:[
+        { n:"1", title:"Distribuição binomial",
+          explain:"Usada quando um experimento se repete várias vezes, cada vez com só dois resultados possíveis (sucesso ou fracasso) e a mesma probabilidade de sucesso (p) em cada tentativa. Fórmula: <span class=\"f\">P(X=K) = [n! \u00F7 (K!(n\u2212K)!)] \u00D7 p^K \u00D7 q^(n\u2212K)</span>, onde q = 1\u2212p.",
+          example:"Uma linha de produção de parafusos tem 8% de peças fora do padrão. Em uma amostra de 6 parafusos, a chance de exatamente 1 estar fora do padrão é P(X=1) = 6\u00D70,08\u00B9\u00D70,92\u2075 \u2248 31,6%.",
+          exercise:"Uma moeda honesta é lançada 4 vezes. Qual a probabilidade de sair exatamente 2 caras? (n=4, p=0,5, e a combinação C(4,2)=6.)",
+          answer:"P(X=2) = 6 \u00D7 0,5\u00B2 \u00D7 0,5\u00B2 = 6 \u00D7 0,0625 = 0,375 = 37,5%." },
+        { n:"2", title:"Distribuição de Poisson",
+          explain:"Usada pra contar quantas vezes um evento raro acontece em um intervalo fixo (tempo, área etc.), a partir da média de ocorrências esperada (\u03BB) nesse intervalo. Fórmula: <span class=\"f\">P(X=x) = [e^(\u2212\u03BBT) \u00D7 (\u03BBT)^x] \u00F7 x!</span>, com e \u2248 2,71828.",
+          example:"Uma padaria vende, em média, 5 bolos de chocolate por hora. A chance de vender exatamente 3 bolos em uma hora é P(X=3) = [e\u207B\u2075\u00D75\u00B3]\u00F73! \u2248 14,0%.",
+          exercise:"Um call center recebe em média 4 ligações por minuto. Qual a chance de não receber nenhuma ligação (X=0) em um minuto?",
+          answer:"P(X=0) = [e\u207B\u2074\u00D74\u2070]\u00F70! = e\u207B\u2074 \u2248 1,83%." },
+        { n:"3", title:"Distribuição exponencial",
+          explain:"Está ligada à Poisson, mas mede a \u201Cdistância\u201D ou o \u201Ctempo\u201D até a próxima ocorrência de um evento. A chance de esperar mais que x unidades é <span class=\"f\">P(X > x) = e^(\u2212\u03BBx)</span>, e tanto a média quanto o desvio padrão valem <span class=\"f\">1 \u00F7 \u03BB</span>.",
+          example:"Se equipamentos falham, em média, a cada 10 horas (\u03BB=0,1), a chance de um equipamento funcionar mais de 15 horas sem falhar é P(X > 15) = e^(\u22120,1\u00D715) \u2248 22,3%.",
+          exercise:"O tempo entre chegadas de clientes numa loja segue uma exponencial com média de 5 minutos (\u03BB=0,2). Qual a probabilidade de o próximo cliente demorar mais de 8 minutos pra chegar?",
+          answer:"P(X > 8) = e^(\u22120,2\u00D78) = e^(\u22121,6) \u2248 20,2%." },
+        { n:"4", title:"Distribuição normal",
+          explain:"É a famosa \u201Ccurva do sino\u201D, simétrica em torno da média (\u03BC), usada pra variáveis contínuas como altura, peso ou notas. Pra calcular probabilidades, converte-se o valor X num \u201Cescore Z\u201D (quantos desvios padrão ele está da média): <span class=\"f\">Z = (X\u2212\u03BC) \u00F7 \u03C3</span>, e depois consulta-se a tabela da normal padrão.",
+          example:"As alturas de um grupo têm média 170 cm e desvio padrão 8 cm. Pra saber a chance de alguém medir menos de 160 cm: Z = (160\u2212170)\u00F78 = \u22121,25, e a tabela dá P(Z < \u22121,25) \u2248 10,6%.",
+          exercise:"Um lote de peças tem média 50 mm e desvio padrão 4 mm. Calcule o escore Z para uma peça de 58 mm.",
+          answer:"Z = (58\u221250)\u00F74 = 8\u00F74 = 2. Essa peça está 2 desvios padrão acima da média." },
+        { n:"5", title:"Teste de normalidade",
+          explain:"Antes de usar a distribuição normal pra analisar dados, é preciso confirmar que eles realmente seguem esse formato de sino. Isso pode ser feito visualmente (comparando o histograma dos dados com a curva normal) ou com testes específicos, como Shapiro-Wilk, Kolmogorov-Smirnov e Anderson-Darling.",
+          example:"Ao construir o histograma do tempo de vida de um componente e sobrepor a curva normal, se as barras seguirem de perto o formato da curva, há indícios de normalidade.",
+          exercise:"Por que é importante testar a normalidade antes de aplicar fórmulas baseadas na distribuição normal?",
+          answer:"Porque essas fórmulas só são confiáveis se os dados realmente seguirem, ao menos aproximadamente, o formato da curva normal — caso contrário, as conclusões podem sair erradas." }
+      ]
+    },
+    {
+      id:4, code:"04", title:"Estatística Inferencial",
+      blurb:"Usar a amostra pra tirar conclusões sobre a população inteira.",
+      topics:[
+        { n:"1", title:"Intervalo de confiança para parâmetros da população",
+          explain:"Em vez de dar um único número (estimativa pontual) pra representar a média da população, o <b>intervalo de confiança</b> dá uma faixa de valores plausíveis, com um grau de confiança escolhido (90%, 95% ou 99%, por exemplo). Fórmula: <span class=\"f\">x\u0304 \u00B1 Z(\u03B1/2) \u00D7 \u03C3/\u221An</span>.",
+          example:"Uma pesquisa mediu o tempo de atendimento de um call center: amostra de 64 ligações, média 8,2 min, \u03C3=1,6 min conhecido. Com 95% de confiança (Z=1,96): 8,2 \u00B1 1,96\u00D7(1,6\u00F7\u221A64) = 8,2 \u00B1 0,39, ou seja, entre 7,81 e 8,59 minutos.",
+          exercise:"Uma amostra de 100 lâmpadas tem duração média de 800 horas, com \u03C3=40 horas. Construa o intervalo de confiança de 95% (Z=1,96) para a média populacional.",
+          answer:"800 \u00B1 1,96\u00D7(40\u00F7\u221A100) = 800 \u00B1 7,84. Intervalo: entre 792,16 e 807,84 horas." },
+        { n:"2", title:"Correlação e regressão linear simples",
+          explain:"A <b>correlação</b> (coeficiente de Pearson, r, entre \u22121 e 1) indica se duas variáveis \u201Candam juntas\u201D e o quanto. Quando a correlação é forte, ajusta-se uma <b>reta de regressão</b> (<span class=\"f\">Y = a + bX</span>) pra prever valores de uma variável a partir da outra.",
+          example:"Estudando horas de estudo por semana e nota em uma prova, para 10 alunos, encontrou-se forte correlação positiva — mostrando que, em geral, mais horas de estudo vieram acompanhadas de notas mais altas.",
+          exercise:"Se o coeficiente de correlação entre duas variáveis é r = \u22120,85, o que isso indica sobre a relação entre elas?",
+          answer:"Indica uma correlação forte e negativa: quando uma variável aumenta, a outra tende a diminuir bastante (e vice-versa)." },
+        { n:"3", title:"Testes de hipóteses",
+          explain:"Um teste de hipóteses compara duas afirmações contraditórias sobre a população: a <b>hipótese nula</b> (H\u2080, considerada verdadeira até prova em contrário) e a <b>hipótese alternativa</b> (H\u2090). Calcula-se uma estatística de teste (Zcalc) e compara-se com um valor crítico pra decidir se há evidência forte o bastante pra rejeitar H\u2080.",
+          example:"Uma máquina deveria produzir parafusos com diâmetro médio de 10 mm. Numa amostra de 49 parafusos, a média foi 9,7 mm (\u03C3=1,4 mm). Zcalc = (9,7\u221210)\u00F7(1,4\u00F7\u221A49) = \u22120,3\u00F70,2 = \u22121,5 — esse valor é comparado a um valor crítico pra decidir se a máquina está desajustada.",
+          exercise:"O que significa \u201Ccometer um Erro Tipo 1\u201D em um teste de hipóteses?",
+          answer:"Significa rejeitar a hipótese nula (H\u2080) quando ela, na verdade, era verdadeira — ou seja, concluir que existe uma diferença que, de fato, não existe." }
+      ]
+    }
+  ];
+
+  var TOTAL_TOPICS = DATA.reduce(function(sum,u){ return sum + u.topics.length; },0);
+
+  /* ---------- storage ---------- */
+  function loadProgress(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(e){ return []; }
+  }
+  function saveProgress(arr){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }catch(e){}
+  }
+  var progress = loadProgress();
+
+  /* ---------- render ---------- */
+  var unitTabsEl = document.getElementById('unitTabs');
+  var panelsEl = document.getElementById('panels');
+
+  var tabsHtml = DATA.map(function(u,i){
+    return '<button class="unit-tab'+(i===0?' active':'')+'" data-unit="'+u.id+'" type="button">'+
+             '<span class="unit-tab-num">Unidade '+u.code+'</span>'+
+             '<span class="unit-tab-name">'+u.title+'</span>'+
+           '</button>';
+  }).join('');
+  unitTabsEl.innerHTML = tabsHtml;
+
+  function escId(s){ return s; }
+
+  var panelsHtml = DATA.map(function(u,uidx){
+    var chips = u.topics.map(function(t){
+      var tid = 't'+u.id+'-'+t.n;
+      return '<a class="chip" href="#'+tid+'" data-target="'+tid+'"><b>'+t.n+'</b>'+t.title+'</a>';
+    }).join('');
+
+    var topics = u.topics.map(function(t,tidx){
+      var tid = 't'+u.id+'-'+t.n;
+      var isDone = progress.indexOf(tid) !== -1;
+      var isOpen = (uidx===0 && tidx===0);
+      return (
+        '<article class="topic'+(isOpen?' open':'')+(isDone?' is-done':'')+'" id="'+tid+'">'+
+          '<button class="topic-head" type="button" aria-expanded="'+(isOpen?'true':'false')+'">'+
+            '<span class="topic-num">'+t.n+'</span>'+
+            '<span class="topic-title">'+t.title+'</span>'+
+            '<span class="topic-chevron" aria-hidden="true"></span>'+
+          '</button>'+
+          '<div class="topic-body-wrap"><div class="topic-body"><div class="topic-body-inner">'+
+            '<p class="explain">'+t.explain+'</p>'+
+            '<div class="box example"><p class="box-label">Exemplo</p><p>'+t.example+'</p></div>'+
+            '<div class="box exercise">'+
+              '<p class="box-label">Exercício</p>'+
+              '<p>'+t.exercise+'</p>'+
+              '<button class="reveal-btn" type="button">Ver resposta</button>'+
+              '<div class="answer"><p>'+t.answer+'</p></div>'+
+            '</div>'+
+            '<label class="done-toggle">'+
+              '<input type="checkbox" class="done-check" data-id="'+tid+'"'+(isDone?' checked':'')+'>'+
+              'Marcar como concluído'+
+            '</label>'+
+          '</div></div></div>'+
+        '</article>'
+      );
+    }).join('');
+
+    return (
+      '<section class="unit-panel'+(uidx===0?' active':'')+'" data-unit="'+u.id+'" id="panel-'+u.id+'">'+
+        '<div class="unit-head">'+
+          '<div>'+
+            '<p class="unit-head-label">Unidade '+u.code+'</p>'+
+            '<h2>'+u.title+'</h2>'+
+            '<p class="unit-blurb">'+u.blurb+'</p>'+
+          '</div>'+
+          '<div class="unit-progress">'+
+            '<span class="unit-progress-track"><span class="unit-progress-fill" id="fill-'+u.id+'"></span></span>'+
+            '<span class="unit-progress-label" id="label-'+u.id+'"></span>'+
+          '</div>'+
+        '</div>'+
+        '<div class="chip-row">'+chips+'</div>'+
+        '<div class="topic-list">'+topics+'</div>'+
+      '</section>'
+    );
+  }).join('');
+  panelsEl.innerHTML = panelsHtml;
+
+  /* ---------- progress UI ---------- */
+  function updateProgressUI(){
+    document.querySelectorAll('.topic').forEach(function(topic){
+      var done = progress.indexOf(topic.id) !== -1;
+      topic.classList.toggle('is-done', done);
+      var cb = topic.querySelector('.done-check');
+      if(cb) cb.checked = done;
+    });
+    DATA.forEach(function(u){
+      var prefix = 't'+u.id+'-';
+      var doneCount = progress.filter(function(id){ return id.indexOf(prefix)===0; }).length;
+      var total = u.topics.length;
+      var pct = total ? Math.round((doneCount/total)*100) : 0;
+      var fill = document.getElementById('fill-'+u.id);
+      var label = document.getElementById('label-'+u.id);
+      if(fill) fill.style.width = pct+'%';
+      if(label) label.textContent = doneCount+' de '+total+' concluídos';
+    });
+    var overallEl = document.getElementById('overallProgress');
+    if(overallEl) overallEl.textContent = progress.length+' de '+TOTAL_TOPICS+' concluídos';
+    var miniLabel = document.getElementById('mini-progress-label');
+    var miniFill = document.getElementById('mini-progress-fill');
+    if(miniLabel) miniLabel.textContent = progress.length+'/'+TOTAL_TOPICS;
+    if(miniFill) miniFill.style.width = (TOTAL_TOPICS? Math.round((progress.length/TOTAL_TOPICS)*100):0)+'%';
+  }
+  updateProgressUI();
+
+  /* ---------- interactions ---------- */
+  document.addEventListener('click', function(e){
+    var tab = e.target.closest('.unit-tab');
+    if(tab){
+      document.querySelectorAll('.unit-tab').forEach(function(b){ b.classList.toggle('active', b===tab); });
+      document.querySelectorAll('.unit-panel').forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-unit')===tab.getAttribute('data-unit')); });
+      var search = document.getElementById('searchInput');
+      if(search.value){ search.value=''; runSearch(''); }
+      return;
+    }
+
+    var head = e.target.closest('.topic-head');
+    if(head){
+      var topic = head.closest('.topic');
+      var open = topic.classList.toggle('open');
+      head.setAttribute('aria-expanded', open ? 'true':'false');
+      return;
+    }
+
+    var reveal = e.target.closest('.reveal-btn');
+    if(reveal){
+      var box = reveal.closest('.exercise');
+      var revealed = box.classList.toggle('revealed');
+      reveal.textContent = revealed ? 'Ocultar resposta' : 'Ver resposta';
+      return;
+    }
+
+    var chip = e.target.closest('.chip');
+    if(chip){
+      e.preventDefault();
+      var target = document.getElementById(chip.getAttribute('data-target'));
+      if(target){
+        target.classList.add('open');
+        var h = target.querySelector('.topic-head');
+        if(h) h.setAttribute('aria-expanded','true');
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+      return;
+    }
+
+    if(e.target.id === 'expandAllBtn'){ toggleExpandAll(); return; }
+    if(e.target.id === 'toTopBtn'){ window.scrollTo({top:0, behavior:'smooth'}); return; }
+    if(e.target.id === 'resetBtn'){
+      if(confirm('Isso vai apagar o progresso salvo neste guia (só neste navegador). Deseja continuar?')){
+        progress = [];
+        saveProgress(progress);
+        updateProgressUI();
+      }
+      return;
+    }
+  });
+
+  document.addEventListener('change', function(e){
+    if(e.target.matches('.done-check')){
+      var id = e.target.getAttribute('data-id');
+      var checked = e.target.checked;
+      var idx = progress.indexOf(id);
+      if(checked && idx===-1) progress.push(id);
+      if(!checked && idx!==-1) progress.splice(idx,1);
+      saveProgress(progress);
+      updateProgressUI();
+    }
+  });
+
+  function getVisibleTopics(){
+    var searching = document.body.classList.contains('is-searching');
+    var panels = searching ? document.querySelectorAll('.unit-panel') : document.querySelectorAll('.unit-panel.active');
+    var arr = [];
+    panels.forEach(function(panel){
+      panel.querySelectorAll('.topic').forEach(function(t){
+        if(t.style.display !== 'none') arr.push(t);
+      });
+    });
+    return arr;
+  }
+
+  function toggleExpandAll(){
+    var visible = getVisibleTopics();
+    var anyClosed = visible.some(function(t){ return !t.classList.contains('open'); });
+    visible.forEach(function(t){
+      t.classList.toggle('open', anyClosed);
+      var h = t.querySelector('.topic-head');
+      if(h) h.setAttribute('aria-expanded', anyClosed ? 'true':'false');
+    });
+    document.getElementById('expandAllBtn').textContent = anyClosed ? 'Recolher tudo' : 'Expandir tudo';
+  }
+
+  function normalize(s){
+    return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  function runSearch(term){
+    term = normalize(term.trim());
+    var hasTerm = term.length > 0;
+    document.body.classList.toggle('is-searching', hasTerm);
+    var anyVisible = false;
+    document.querySelectorAll('.topic').forEach(function(topic){
+      var text = normalize(topic.textContent);
+      var match = !hasTerm || text.indexOf(term) !== -1;
+      topic.style.display = match ? '' : 'none';
+      if(match) anyVisible = true;
+    });
+    document.getElementById('noResults').style.display = (hasTerm && !anyVisible) ? 'block' : 'none';
+  }
+
+  var searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function(){ runSearch(this.value); });
+
+  window.addEventListener('scroll', function(){
+    document.getElementById('toTopBtn').classList.toggle('visible', window.scrollY > 500);
+  }, {passive:true});
+
+})();
+</script>
+</body>
+</html>
